@@ -18,7 +18,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 # 
-
+import matplotlib.pylab as plt
 import numpy
 from gnuradio import gr
 import scipy.signal as sp
@@ -26,15 +26,16 @@ class welch(gr.sync_block):
     """
     docstring for block welch
     """
-    def __init__(self, nData, scale, nf, fs):
+    def __init__(self, nData, scale, nf, fs, noverlap):
         gr.sync_block.__init__(self,
             name="welch",
             in_sig=[(numpy.complex64, nData)],
-            out_sig=[(numpy.complex64, nf)],)
+            out_sig=[(numpy.complex64, nf)])
  	self.nData = nData
         self.scale = scale
         self.nf = nf
         self.fs = fs
+        self.noverlap = noverlap
 
 
     def work(self, input_items, output_items):
@@ -44,7 +45,10 @@ class welch(gr.sync_block):
             x = in0[i]
             f, pw = sp.welch(x,fs=self.fs,window='hann',
                          nperseg = self.nf,
-                         noverlap=self.nf/2,scaling=self.scale)
+                         noverlap=self.nf*self.noverlap,
+                         scaling=self.scale,detrend=False)
+            #fname = 'fspectrum'+str(self.nf)+'.txt'
+            #numpy.savetxt(fname, f)
             out[i] = pw
         return len(output_items[0])
         (output_items[0])

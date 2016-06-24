@@ -4,16 +4,41 @@
   <key>WelchManager_welch</key>
   <category>WelchManager</category>
   <import>import WelchManager</import>
-  <make>WelchManager.welch()</make>
+  <make>WelchManager.welch($nData, $scale, $nf, $fs, $noverlap)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
        * key (makes the value accessible as $keyname, e.g. in the make node)
        * type -->
   <param>
-    <name>...</name>
-    <key>...</key>
-    <type>...</type>
+    <name>nData</name>
+    <key>nData</key>
+    <value>10000</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>scale</name>
+    <key>scale</key>
+    <value>'density'</value>
+    <type>string</type>
+  </param>
+  <param>
+    <name>nf</name>
+    <key>nf</key>
+    <value>1024</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>fs</name>
+    <key>fs</key>
+    <value>10000</value>
+    <type>float</type>
+  </param>
+  <param>
+    <name>noverlap</name>
+    <key>noverlap</key>
+    <value>.5</value>
+    <type>float</type>
   </param>
 
   <!-- Make one 'sink' node per input. Sub-nodes:
@@ -23,7 +48,8 @@
        * optional (set to 1 for optional inputs) -->
   <sink>
     <name>in</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
+    <vlen>$nData</vlen>
   </sink>
 
   <!-- Make one 'source' node per output. Sub-nodes:
@@ -33,6 +59,7 @@
        * optional (set to 1 for optional inputs) -->
   <source>
     <name>out</name>
-    <type><!-- e.g. int, float, complex, byte, short, xxx_vector, ...--></type>
+    <type>complex</type>
+    <vlen>$nf</vlen>
   </source>
 </block>

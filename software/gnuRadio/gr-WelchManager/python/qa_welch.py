@@ -24,6 +24,7 @@ from gnuradio import blocks
 from welch import welch
 import numpy as np
 import matplotlib.pylab as plt
+import scipy.signal as sp
 
 class qa_welch (gr_unittest.TestCase):
 
@@ -34,34 +35,40 @@ class qa_welch (gr_unittest.TestCase):
         self.tb = None
 
     def test_001_t (self):
-        src_data_real = np.genfromtxt('input2.txt')
-        src_data_imag = np.zeros(len(src_data_real), dtype=np.float32)
-	expected_result = np.genfromtxt('output2.txt')
-        src_data = src_data_real + 1j*src_data_imag
+        def generate(inputs):
+            fs = 10000.0
+            f1 = 1234.0
+            amp1 = 2*np.sqrt(2)
+            f2 = 2500.2157
+            amp2 = 1.
+            ulsb = 1.e-3
+            t = np.arange(inputs) / fs
+            waves = amp1*np.sin(t*(2*np.pi)*f1)+amp2*np.sin(t*(2*np.pi)*f2)
+            noise = np.floor(waves/ulsb+.5)*ulsb
+            data = waves + noise
+            return data
+        rdata = generate(10000)
+        idata = np.zeros(len(rdata))*1j
+        src_data = np.add(rdata,idata)
+        nf = 1024
+	fs = 10000
+	scale = 'density'
+        nperseg = nf
+        freq, expected_result = sp.welch(src_data,fs=10000,
+                          window='hann',nperseg=nperseg,
+                          noverlap=nf*.5,scaling=scale,detrend=False)
         item_size = np.dtype("complex64").itemsize
         nData = len(src_data)
         s2v = blocks.stream_to_vector(item_size, nData)
-	scale = 'density'
-	nf = 1024
-	fs = 10000
 	src = blocks.vector_source_c(src_data)
-	wel = welch(nData, scale, nf, fs)
+	wel = welch(nData, scale, nf, fs, .5)
 	dst = blocks.vector_sink_c(nf)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
 	self.tb.connect(wel, dst)
 	self.tb.run ()
 	result = dst.data()
-	#self.assertFloatTuplesAlmostEqual(expected_result, result, 6)
-        h = len(result)/2
-        nonmir1 = result[:h]
-        nonmir2 = result[::-1]
-        nonmir3 = nonmir2[:h]
-        nonmir = np.add(nonmir1, nonmir3)
-        plt.semilogy(nonmir, color ='g')
-        plt.semilogy(expected_result, color = 'r')
-        plt.axhline(2/np.sqrt(2))
-        plt.show()
+	self.assertFloatTuplesAlmostEqual(expected_result, result, 5)
         
 
 if __name__ == '__main__':
