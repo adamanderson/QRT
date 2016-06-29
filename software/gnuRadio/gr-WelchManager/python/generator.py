@@ -17,23 +17,22 @@ def generate(inputs):
 a = generate(10000)
 #print a
 #print len(a)
-np.savetxt('input2.txt', a) 
+np.savetxt('generatedstuff.txt', a) 
 #fig1 = plt.plot(a)
 #plt.show(fig1)
 nperseg = 10000
 scale = 'density'
 src = np.genfromtxt('input2.txt')
 comp = src + 1j*np.zeros(len(src))
-freq, pow = welch(src,fs=10000,window='hann',nperseg=nperseg,noverlap=nperseg/2,scaling=scale)
+freq, pow = welch(comp,fs=10000,window='hann',nperseg=nperseg,noverlap=nperseg/2,scaling=scale)
 #print freq
 #print pow
 #a0 = zip(freq, pow)
-np.savetxt('output4.txt', pow)
-#f = open('abc.stuffpw', 'w')
-#f.write(pow)
-#f.close()
-#plt.semilogy(freq, np.sqrt(pow), color='r')
+np.savetxt('power.txt', pow)
+np.savetxt('freq.txt', freq)
+plt.semilogy(freq, np.sqrt(pow), color='r')
 #plt.semilogy(*zip(*a0), color='cyan')
 #plt.axhline(2*np.sqrt(2), color = 'g')
 #plt.axhline(1, color='c')
-#plt.show()
+plt.savefig('generatorprogramfft.svg')
+plt.show()
