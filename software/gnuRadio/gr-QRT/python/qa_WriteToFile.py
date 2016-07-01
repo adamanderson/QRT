@@ -74,15 +74,19 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset = f[subgroup1+'/test']
             dset.attrs['date'] = time
             dset.attrs['telescope'] = tname
+            dset.attrs['scale'] = scale
+            dset.attrs['fs'] = fs
             dset = dset[...] + power[...]
         else:
             dset = f.create_dataset(subgroup1+'/test',data=power)
             dset.attrs['date'] = time
             dset.attrs['telescope'] = tname
+            dset.attrs['scale'] = scale
+            dset.attrs['fs'] = fs
         s2v = blocks.stream_to_vector(item_size, nData)
 	src = blocks.vector_source_c(src_data)
 	wel = welch(nData, scale, nf, fs, .5)
-	fil = WriteToFile(tname, nf)
+	fil = WriteToFile(tname, nf, scale, fs)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
 	self.tb.connect(wel, fil)

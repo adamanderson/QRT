@@ -13,7 +13,7 @@
   <param>
     <name>nData</name>
     <key>nData</key>
-    <value>10000</value>
+    <value>sample_rate</value>
     <type>int</type>
   </param>
   <param>
@@ -31,7 +31,7 @@
   <param>
     <name>fs</name>
     <key>fs</key>
-    <value>10000</value>
+    <value>samp_rate</value>
     <type>float</type>
   </param>
   <param>

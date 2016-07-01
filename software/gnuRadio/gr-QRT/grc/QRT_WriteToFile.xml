@@ -4,7 +4,7 @@
   <key>QRT_WriteToFile</key>
   <category>QRT</category>
   <import>import QRT</import>
-  <make>QRT.WriteToFile($tname, $nf)</make>
+  <make>QRT.WriteToFile($tname, $nf, $scale, $fs)</make>
  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -21,6 +21,18 @@
     <value>1024</value>
     <type>int</type>
   </param>
+  <param>
+    <name>scale</name>
+    <key>scale</key>
+    <value>'density'</value>
+    <type>string</type>
+  </param>
+  <param>
+    <name>fs</name>
+    <key>fs</key>
+    <value>samp_rate</value>
+    <type>float</type>
+</param>
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
        * type

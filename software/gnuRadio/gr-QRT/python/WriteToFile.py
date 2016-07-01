@@ -28,14 +28,15 @@ class WriteToFile(gr.sync_block):
     """
     docstring for block WriteToFile
     """
-    def __init__(self, tname, nf):
+    def __init__(self, tname, nf, scale, fs):
         gr.sync_block.__init__(self,
             name="WriteToFile",
             in_sig=[(numpy.complex64, nf)],
             out_sig=None)
         self.tname = tname
         self.nf = nf
-
+        self.scale = scale
+        self.fs = fs
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
@@ -49,10 +50,14 @@ class WriteToFile(gr.sync_block):
             dset = f[subgroup+'/'+dset_name]
             dset.attrs['telescope'] = self.tname
             dset.attrs['date'] = time
+            dset.attrs['scale'] = self.scale
+            dset.attrs['fs'] = self.fs
             dset = dset[...] + in0[0]
         else:
             dset = f.create_dataset(subgroup+'/'+dset_name,data=in0[0])
             dset.attrs['date'] = time
             dset.attrs['telescope'] = self.tname
+            dset.attrs['scale'] = self.scale
+            dset.attrs['fs'] = self.fs
         return len(input_items[0])
 
