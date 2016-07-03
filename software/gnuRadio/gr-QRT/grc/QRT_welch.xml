@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<block>
+  <name>welch</name>
+  <key>QRT_welch</key>
+  <category>QRT</category>
+  <import>import QRT</import>
+  <make>QRT.welch($nData, $scale, $nf, $fs, $noverlap)</make>
+  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
+       Sub-nodes:
+       * name
+       * key (makes the value accessible as $keyname, e.g. in the make node)
+       * type -->
+  <param>
+    <name>nData</name>
+    <key>nData</key>
+    <value>sample_rate</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>scale</name>
+    <key>scale</key>
+    <value>'density'</value>
+    <type>string</type>
+  </param>
+  <param>
+    <name>nf</name>
+    <key>nf</key>
+    <value>1024</value>
+    <type>int</type>
+  </param>
+  <param>
+    <name>fs</name>
+    <key>fs</key>
+    <value>samp_rate</value>
+    <type>float</type>
+  </param>
+  <param>
+    <name>noverlap</name>
+    <key>noverlap</key>
+    <value>.5</value>
+    <type>float</type>
+  </param>
+
+  <!-- Make one 'sink' node per input. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <sink>
+    <name>in</name>
+    <type>complex</type>
+    <vlen>$nData</vlen>
+  </sink>
+
+  <!-- Make one 'source' node per output. Sub-nodes:
+       * name (an identifier for the GUI)
+       * type
+       * vlen
+       * optional (set to 1 for optional inputs) -->
+  <source>
+    <name>out</name>
+    <type>complex</type>
+    <vlen>$nf</vlen>
+  </source>
+</block>
