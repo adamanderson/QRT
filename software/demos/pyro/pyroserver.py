@@ -11,14 +11,16 @@ import timeit
 
 Pyro4.config.SERVERTYPE="thread"
 hostname=socket.gethostname()
-
+print(hostname)
 
 print("initializing services... servertype=%s" % Pyro4.config.SERVERTYPE)
 # start a name server with broadcast server as well
-nameserverUri, nameserverDaemon, broadcastServer = Pyro4.naming.startNS(host=hostname)
+nameserverUri, nameserverDaemon, broadcastServer = Pyro4.naming.startNS(host='localhost')
+print(nameserverUri)
+print(nameserverDaemon)
 
 # create a Pyro daemon
-pyrodaemon=Pyro4.core.Daemon(host=hostname)
+pyrodaemon=Pyro4.core.Daemon(host='localhost')
 
 # register a server object with the daemon
 motorcontroller = MotorControl.MotorControl()
@@ -27,6 +29,8 @@ serveruri=pyrodaemon.register(motorcontroller)
 # register it with the embedded nameserver directly
 nameserverDaemon.nameserver.register("example.embedded.server",serveruri)
 
+#testing
+#nameserverDaemon.requestLoop()
 
 
 # below is our custom event loop.
@@ -37,7 +41,8 @@ while True:
     # (a set provides fast lookup compared to a list)
     nameserverSockets = set(nameserverDaemon.sockets)
     pyroSockets = set(pyrodaemon.sockets)
-    rs=[broadcastServer]  # only the broadcast server is directly usable as a select() object
+    #rs=[broadcastServer]  # only the broadcast server is directly usable as a select() object
+    rs = []
     rs.extend(nameserverSockets)
     rs.extend(pyroSockets)
 
