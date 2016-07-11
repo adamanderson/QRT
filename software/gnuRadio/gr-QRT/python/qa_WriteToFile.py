@@ -49,12 +49,13 @@ class qa_WriteToFile (gr_unittest.TestCase):
             noise = np.floor(waves/ulsb+.5)*ulsb
             data = waves + noise
             return data
+        path = ''
         rdata = generate(10000)
         idata = np.zeros(len(rdata))*1j
         src_data = np.add(rdata,idata)
         nf = 1024
-	fs = 10000
-	scale = 'density'
+        fs = 10000
+        scale = 'density'
         nperseg = nf
         item_size = np.dtype("complex64").itemsize
         tname = '0'
@@ -86,7 +87,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
         s2v = blocks.stream_to_vector(item_size, nData)
 	src = blocks.vector_source_c(src_data)
 	wel = welch(nData, scale, nf, fs, .5)
-	fil = WriteToFile(tname, nf, scale, fs)
+	fil = WriteToFile(tname, nf, scale, fs, path)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
 	self.tb.connect(wel, fil)
