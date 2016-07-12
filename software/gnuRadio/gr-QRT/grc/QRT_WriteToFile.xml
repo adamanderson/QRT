@@ -43,6 +43,7 @@
     <key>flo</key>
     <value>1.4e9</value>
     <type>int</type>
+</param>
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
        * type
