@@ -50,6 +50,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
             data = waves + noise
             return data
         path = ''
+        flo = 0
         rdata = generate(10000)
         idata = np.zeros(len(rdata))*1j
         src_data = np.add(rdata,idata)
@@ -77,6 +78,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['telescope'] = tname
             dset.attrs['scale'] = scale
             dset.attrs['fs'] = fs
+            dset.attrs['flo'] = flo
             dset = dset[...] + power[...]
         else:
             dset = f.create_dataset(subgroup1+'/test',data=power)
@@ -84,10 +86,11 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['telescope'] = tname
             dset.attrs['scale'] = scale
             dset.attrs['fs'] = fs
+            dset.attrs['flo'] = flo
         s2v = blocks.stream_to_vector(item_size, nData)
 	src = blocks.vector_source_c(src_data)
 	wel = welch(nData, scale, nf, fs, .5)
-	fil = WriteToFile(tname, nf, scale, fs, path)
+	fil = WriteToFile(tname, nf, scale, fs, path, flo)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
 	self.tb.connect(wel, fil)

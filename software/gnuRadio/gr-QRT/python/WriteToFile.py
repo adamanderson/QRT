@@ -18,7 +18,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
-#Version 2
+#Version 3
 
 import numpy
 from gnuradio import gr
@@ -29,7 +29,7 @@ class WriteToFile(gr.sync_block):
     """
     docstring for block WriteToFile
     """
-    def __init__(self, tname, nf, scale, fs, path):
+    def __init__(self, tname, nf, scale, fs, path, flo):
         gr.sync_block.__init__(self,
             name="WriteToFile",
             in_sig=[(numpy.complex64, nf)],
@@ -40,6 +40,7 @@ class WriteToFile(gr.sync_block):
         self.scale = scale
         self.fs = fs
         self.path = path
+        self.flo = flo
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
@@ -60,6 +61,7 @@ class WriteToFile(gr.sync_block):
             dset.attrs['date'] = time
             dset.attrs['scale'] = self.scale
             dset.attrs['fs'] = self.fs
+            dset.attrs['flo'] = self.flo
             dset = dset[...] + in0[0]
         else:
             #Writes data and metadata
@@ -68,5 +70,6 @@ class WriteToFile(gr.sync_block):
             dset.attrs['telescope'] = self.tname
             dset.attrs['scale'] = self.scale
             dset.attrs['fs'] = self.fs
+            dset.attrs['flo'] = self.flo
         return len(input_items[0])
 

@@ -17,7 +17,8 @@
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
+#
+# Version 1
 import numpy
 from gnuradio import gr
 import scipy.signal as sp
@@ -30,6 +31,7 @@ class welch(gr.sync_block):
             name="welch",
             in_sig=[(numpy.complex64, nData)],
             out_sig=[(numpy.complex64, nf)])
+        #Makes parameters usable in work function
         self.nData = nData
         self.scale = scale
         self.nf = nf
@@ -42,6 +44,7 @@ class welch(gr.sync_block):
         out = output_items[0]
         for i in xrange (len(in0)):
             x = in0[i]
+            #Uses the scipy.signal.welch method to average data
             f, pw = sp.welch(x,fs=self.fs,window='hann',
                          nperseg = self.nf,
                          noverlap=self.nf*self.noverlap,
