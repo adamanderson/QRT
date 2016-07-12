@@ -17,7 +17,8 @@
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
+#
+# Version 1
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
@@ -38,6 +39,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
 
     def test_001_t (self):
         def generate(inputs):
+            # Generates data to save
             fs = 10000.0
             f1 = 1234.0
             amp1 = 2*np.sqrt(2)
@@ -49,11 +51,14 @@ class qa_WriteToFile (gr_unittest.TestCase):
             noise = np.floor(waves/ulsb+.5)*ulsb
             data = waves + noise
             return data
+        # Sets perameters
         path = ''
         flo = 0
+        # Makes imaginary data
         rdata = generate(10000)
         idata = np.zeros(len(rdata))*1j
         src_data = np.add(rdata,idata)
+        # Sets more perameters
         nf = 1024
         fs = 10000
         scale = 'density'
@@ -67,11 +72,13 @@ class qa_WriteToFile (gr_unittest.TestCase):
         subgroup = 'test'
         subgroup1 = str(date.minute)
         dset_name = str(date.second)
+        # Sends the test data through Welch procesing
         freq, power = sp.welch(src_data,fs=10000,
                           window='hann',nperseg=nperseg,
                           noverlap=nf*.5,scaling=scale,detrend=False,return_onesided=False)
         time = (date.year,date.month,date.day,date.hour,date.minute,date.second)
         power = np.add(power,np.zeros(len(power))*1.j)
+        # Saves the data with h5py, adds metadata
         if subgroup1+'/test' in f:
             dset = f[subgroup1+'/test']
             dset.attrs['date'] = time
@@ -88,6 +95,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['fs'] = fs
             dset.attrs['flo'] = flo
         s2v = blocks.stream_to_vector(item_size, nData)
+    # Sends the source data through the welch module then the WriteToFile module.
 	src = blocks.vector_source_c(src_data)
 	wel = welch(nData, scale, nf, fs, .5)
 	fil = WriteToFile(tname, nf, scale, fs, path, flo)
@@ -97,6 +105,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
 	self.tb.run ()
         result = f[subgroup1+'/'+dset_name]
         expected_result = f[subgroup1+'/test']
+    # Checks test data to module data
 	self.assertFloatTuplesAlmostEqual(expected_result[...], result[...])
 
 if __name__ == '__main__':

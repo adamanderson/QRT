@@ -17,7 +17,8 @@
 # along with this software; see the file COPYING.  If not, write to
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
-# 
+#
+# Version 1
 
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
@@ -36,6 +37,7 @@ class qa_welch (gr_unittest.TestCase):
 
     def test_001_t (self):
         def generate(inputs):
+            # Generates data to test with
             fs = 10000.0
             f1 = 1234.0
             amp1 = 2*np.sqrt(2)
@@ -48,27 +50,32 @@ class qa_welch (gr_unittest.TestCase):
             data = waves + noise
             return data
         rdata = generate(10000)
+        # Makes data complex
         idata = np.zeros(len(rdata))*1j
         src_data = np.add(rdata,idata)
+        # Defines perameters
         nf = 1024
-	fs = 10000
-	scale = 'density'
+        fs = 10000
+        scale = 'density'
         nperseg = nf
+        # Processes data with Welch method using scipy.signal.welch command
         freq, expected_result = sp.welch(src_data,fs=10000,
                           window='hann',nperseg=nperseg,
                           noverlap=nf*.5,scaling=scale,detrend=False)
         item_size = np.dtype("complex64").itemsize
         nData = len(src_data)
+        # Sends the source data through the welch module
         s2v = blocks.stream_to_vector(item_size, nData)
-	src = blocks.vector_source_c(src_data)
-	wel = welch(nData, scale, nf, fs, .5)
-	dst = blocks.vector_sink_c(nf)
-	self.tb.connect(src, s2v)
+        src = blocks.vector_source_c(src_data)
+        wel = welch(nData, scale, nf, fs, .5)
+        dst = blocks.vector_sink_c(nf)
+        self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
-	self.tb.connect(wel, dst)
-	self.tb.run ()
-	result = dst.data()
-	self.assertFloatTuplesAlmostEqual(expected_result, result, 5)
+        self.tb.connect(wel, dst)
+        self.tb.run ()
+        result = dst.data()
+        # Checks welch module with scipy.signal.welch
+        self.assertFloatTuplesAlmostEqual(expected_result, result, 5)
         
 
 if __name__ == '__main__':
