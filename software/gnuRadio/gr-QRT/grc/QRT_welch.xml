@@ -13,7 +13,7 @@
   <param>
     <name>nData</name>
     <key>nData</key>
-    <value>sample_rate</value>
+    <value>samp_rate</value>
     <type>int</type>
   </param>
   <param>
