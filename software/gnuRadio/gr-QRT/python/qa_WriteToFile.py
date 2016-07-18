@@ -125,8 +125,8 @@ class qa_WriteToFile (gr_unittest.TestCase):
 	self.tb.run ()
         result = f[subgroup1+'/'+dset_name]
         expected_result = f[subgroup1+'/test']
-    # Checks test data to module data
-	self.assertFloatTuplesAlmostEqual(expected_result[...], result[...])
+	    # Checks test data to module data
+	self.assertFloatTuplesAlmostEqual(expected_result[...], result[...], 3)
 
 if __name__ == '__main__':
     gr_unittest.run(qa_WriteToFile, "qa_WriteToFile.xml")
