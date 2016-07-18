@@ -4,7 +4,7 @@
   <key>QRT_welch</key>
   <category>QRT</category>
   <import>import QRT</import>
-  <make>QRT.welch($nData, $scale, $nf, $fs, $noverlap)</make>
+  <make>QRT.welch($nData, $scale, $nf, $fs, $noverlap, $averaging, $avgn)</make>
   <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -40,7 +40,18 @@
     <value>.5</value>
     <type>float</type>
   </param>
-
+  <param>
+      <name>Averaging</name>
+      <key>averaging</key>
+      <value>True</value>
+      <type>boolean</type>
+  </param>
+  <param>
+      <name>Averagin Number</name>
+      <key>avgn</key>
+      <value>1</value>
+      <type>int</type>
+  </param>
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
        * type
@@ -49,7 +60,7 @@
   <sink>
     <name>in</name>
     <type>complex</type>
-    <vlen>$nData</vlen>
+    <vlen>$nData*$avgn</vlen>
   </sink>
 
   <!-- Make one 'source' node per output. Sub-nodes:

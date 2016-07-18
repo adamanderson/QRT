@@ -19,7 +19,7 @@
 # Boston, MA 02110-1301, USA.
 #
 # Version 4
-
+Version = 4
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 from WriteToFile import WriteToFile
@@ -78,6 +78,12 @@ class qa_WriteToFile (gr_unittest.TestCase):
                           noverlap=nf*.5,scaling=scale,detrend=False,return_onesided=False)
         time = (date.year,date.month,date.day,date.hour,date.minute,date.second)
         power = np.add(power,np.zeros(len(power))*1.j)
+        lat = 41.825
+        long = -88.2439
+        alt = 0
+        az = 0
+        averaging = False
+        avgn = 1
         # Saves the data with h5py, adds metadata
         if subgroup1+'/test' in f:
             dset = f[subgroup1+'/test']
@@ -86,6 +92,13 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['scale'] = scale
             dset.attrs['fs'] = fs
             dset.attrs['flo'] = flo
+            dset.attrs['latitude'] = lat
+            dset.attrs['longitude'] = long
+            dset.attrs['altitude'] = altitude
+            dset.attrs['azimuth'] = az
+            dset.attrs['averaging'] = averaging
+            dset.attrs['avgn'] = avgn
+            data.attrs['version'] = Version
             dset = dset[...] + power[...]
         else:
             dset = f.create_dataset(subgroup1+'/test',data=power)
@@ -94,11 +107,18 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['scale'] = scale
             dset.attrs['fs'] = fs
             dset.attrs['flo'] = flo
+            dset.attrs['latitude'] = lat
+            dset.attrs['longitude'] = long
+            dset.attrs['altitude'] = altitude
+            dset.attrs['azimuth'] = az
+            dset.attrs['averaging'] = averaging
+            dset.attrs['avgn'] = avgn
+            data.attrs['version'] = Version
         s2v = blocks.stream_to_vector(item_size, nData)
     # Sends the source data through the welch module then the WriteToFile module.
 	src = blocks.vector_source_c(src_data)
 	wel = welch(nData, scale, nf, fs, .5)
-	fil = WriteToFile(tname, nf, scale, fs, path, flo)
+	fil = WriteToFile(tname, nf, scale, fs, path, flo, lat, long, alt, az, averaging, avgn)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
 	self.tb.connect(wel, fil)

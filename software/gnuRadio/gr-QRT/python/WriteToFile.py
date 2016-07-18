@@ -33,7 +33,7 @@ class WriteToFile(gr.sync_block):
     def __init__(self, tname, nf, scale, fs, path, flo, lat, long, alt, az, averaging, avgn):
         gr.sync_block.__init__(self,
             name="WriteToFile",
-            in_sig=[(numpy.complex64, nf*avgn)],
+            in_sig=[(numpy.complex64, nf)],
             out_sig=None)
         #Carries over perameters
         self.tname = tname
@@ -61,12 +61,6 @@ class WriteToFile(gr.sync_block):
         subgroup = str(date.minute)
         dset_name = str(date.second)
         time = (date.year,date.month,date.day,date.hour,date.minute,date.second)
-        avg = []
-        for m in np.arange(self.avgn):
-            n = 1024*m
-            l = 1024*(m+1)
-            avg = np.add(avg,in0[0][n:l]
-        avg = avg/navg
         if subgroup+'/'+dset_name in f:
             #Writes data and metadata
             dset = f[subgroup+'/'+dset_name]
@@ -81,6 +75,7 @@ class WriteToFile(gr.sync_block):
             dset.attrs['azimuth'] = self.az
             dset.attrs['averaging'] = self.averaging
             dset.attrs['avgn'] = self.avgn
+            data.attrs['version'] = Version
             dset = dset[...] + avg
         else:
             #Writes data and metadata
@@ -96,6 +91,7 @@ class WriteToFile(gr.sync_block):
             dset.attrs['azimuth'] = self.az
             dset.attrs['averaging'] = self.averaging
             dset.attrs['avgn'] = self.avgn
+            data.attrs['version'] = Version
             dset = dset[...] + avg
         return len(input_items[0])
 

@@ -26,10 +26,10 @@ class welch(gr.sync_block):
     """
     docstring for block welch
     """
-    def __init__(self, nData, scale, nf, fs, noverlap):
+    def __init__(self, nData, scale, nf, fs, noverlap, avg, avgn):
         gr.sync_block.__init__(self,
             name="welch",
-            in_sig=[(numpy.complex64, nData)],
+            in_sig=[(numpy.complex64, nData*avgn)],
             out_sig=[(numpy.complex64, nf)])
         #Makes parameters usable in work function
         self.nData = nData
@@ -37,18 +37,30 @@ class welch(gr.sync_block):
         self.nf = nf
         self.fs = fs
         self.noverlap = noverlap
+        self.avgn = avgn
+        self.avg = avg
 
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
         out = output_items[0]
-        for i in xrange (len(in0)):
-            x = in0[i]
+        if avg:
+            aver = []
+            for i in xrange (len(in0)/avgn):
+                ll = (i * avgn) - avgn
+                ul = (i*avgn)
+                aver[i] = np.zeros(nData)
+                for num in range(ll,ul):
+                    np.add(aver[i],in0[num])
+                aver[i] = aver[i]/avgn
+        for i in xrange (len(aver))
+            x = aver[i]
             #Uses the scipy.signal.welch method to average data
             f, pw = sp.welch(x,fs=self.fs,window='hann',
                          nperseg = self.nf,
                          noverlap=self.nf*self.noverlap,
                          scaling=self.scale,detrend=False)
+            
             out[i] = pw
         return len(output_items[0])
         (output_items[0])

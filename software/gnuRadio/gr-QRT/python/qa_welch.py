@@ -58,6 +58,8 @@ class qa_welch (gr_unittest.TestCase):
         fs = 10000
         scale = 'density'
         nperseg = nf
+        avg = False
+        avgn = 1
         # Processes data with Welch method using scipy.signal.welch command
         freq, expected_result = sp.welch(src_data,fs=10000,
                           window='hann',nperseg=nperseg,
@@ -67,7 +69,7 @@ class qa_welch (gr_unittest.TestCase):
         # Sends the source data through the welch module
         s2v = blocks.stream_to_vector(item_size, nData)
         src = blocks.vector_source_c(src_data)
-        wel = welch(nData, scale, nf, fs, .5)
+        wel = welch(nData, scale, nf, fs, .5, avg, avgn)
         dst = blocks.vector_sink_c(nf)
         self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
