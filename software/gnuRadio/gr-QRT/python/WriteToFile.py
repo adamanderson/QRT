@@ -18,21 +18,22 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
-#Version 3
+#Version 4
 
 import numpy
 from gnuradio import gr
 import h5py
 import datetime as dt
 
+Version = 4
 class WriteToFile(gr.sync_block):
     """
     docstring for block WriteToFile
     """
-    def __init__(self, tname, nf, scale, fs, path, flo):
+    def __init__(self, tname, nf, scale, fs, path, flo, lat, long, alt, az, averaging, avgn):
         gr.sync_block.__init__(self,
             name="WriteToFile",
-            in_sig=[(numpy.complex64, nf)],
+            in_sig=[(numpy.complex64, nf*avgn)],
             out_sig=None)
         #Carries over perameters
         self.tname = tname
@@ -41,6 +42,12 @@ class WriteToFile(gr.sync_block):
         self.fs = fs
         self.path = path
         self.flo = flo
+        self.lat = lat
+        self.long = long
+        self.alt = alt
+        self.az = az
+        self.averaging = averaging
+        self.avgn = avgn
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
@@ -54,6 +61,12 @@ class WriteToFile(gr.sync_block):
         subgroup = str(date.minute)
         dset_name = str(date.second)
         time = (date.year,date.month,date.day,date.hour,date.minute,date.second)
+        avg = []
+        for m in np.arange(self.avgn):
+            n = 1024*m
+            l = 1024*(m+1)
+            avg = np.add(avg,in0[0][n:l]
+        avg = avg/navg
         if subgroup+'/'+dset_name in f:
             #Writes data and metadata
             dset = f[subgroup+'/'+dset_name]
@@ -62,7 +75,13 @@ class WriteToFile(gr.sync_block):
             dset.attrs['scale'] = self.scale
             dset.attrs['fs'] = self.fs
             dset.attrs['flo'] = self.flo
-            dset = dset[...] + in0[0]
+            dset.attrs['latitude'] = self.lat
+            dset.attrs['longitude'] = self.long
+            dset.attrs['altitude'] = self.altitude
+            dset.attrs['azimuth'] = self.az
+            dset.attrs['averaging'] = self.averaging
+            dset.attrs['avgn'] = self.avgn
+            dset = dset[...] + avg
         else:
             #Writes data and metadata
             dset = f.create_dataset(subgroup+'/'+dset_name,data=in0[0])
@@ -71,5 +90,12 @@ class WriteToFile(gr.sync_block):
             dset.attrs['scale'] = self.scale
             dset.attrs['fs'] = self.fs
             dset.attrs['flo'] = self.flo
+            dset.attrs['latitude'] = self.lat
+            dset.attrs['longitude'] = self.long
+            dset.attrs['altitude'] = self.altitude
+            dset.attrs['azimuth'] = self.az
+            dset.attrs['averaging'] = self.averaging
+            dset.attrs['avgn'] = self.avgn
+            dset = dset[...] + avg
         return len(input_items[0])
 

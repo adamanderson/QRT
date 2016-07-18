@@ -4,7 +4,7 @@
   <key>QRT_WriteToFile</key>
   <category>QRT</category>
   <import>import QRT</import>
-  <make>QRT.WriteToFile($tname, $nf, $scale, $fs, $path, $flo)</make>
+  <make>QRT.WriteToFile($tname, $nf, $scale, $fs, $path, $flo, $lat, $long, $alt, $az, $averaging, $avgn)</make>
  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -42,6 +42,42 @@
     <name>Local Frequency</name>
     <key>flo</key>
     <value>1.4e9</value>
+    <type>float</type>
+</param>
+<param>
+    <name>Altitude</name>
+    <key>alt</key>
+    <value>alt</value>
+    <type>float</type>
+</param>
+<param>
+    <name>Azimuth</name>
+    <key>az</key>
+    <value>az</value>
+    <type>float</type>
+</param>
+<param>
+    <name>Latitude</name>
+    <key>lat</key>
+    <value>41.825</value>
+    <type>float</type>
+</param>
+<param>
+    <name>Longitude</name>
+    <key>long</key>
+    <value>-88.2439</value>
+    <type>float</type>
+</param>
+<param>
+    <name>Averaging</name>
+    <key>averaging</key>
+    <value>True</value>
+    <type>boolean</type>
+</param>
+<param>
+    <name>Averagin Number</name>
+    <key>avgn</key>
+    <value>1</value>
     <type>int</type>
 </param>
   <!-- Make one 'sink' node per input. Sub-nodes:
@@ -52,6 +88,6 @@
   <sink>
     <name>in</name>
     <type>complex</type>
-    <vlen>$nf</vlen>
+    <vlen>$nf*$avgn</vlen>
   </sink>
 </block>
