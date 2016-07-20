@@ -18,7 +18,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
-# Version 1
+# Version 3
 import numpy
 from gnuradio import gr
 import scipy.signal as sp
@@ -46,6 +46,7 @@ class welch(gr.sync_block):
         out = output_items[0]
         if self.avg:
             aver = []
+            avgn = self.avgn
             for i in xrange (len(in0)/avgn):
                 ll = (i * avgn) - avgn
                 ul = (i*avgn)
