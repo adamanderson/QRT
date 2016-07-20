@@ -58,7 +58,7 @@ class qa_welch (gr_unittest.TestCase):
         fs = 10000
         scale = 'density'
         nperseg = nf
-        avg = False
+        avg = 'False'
         avgn = 1
         # Processes data with Welch method using scipy.signal.welch command
         freq, expected_result = sp.welch(src_data,fs=10000,

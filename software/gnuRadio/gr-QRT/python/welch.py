@@ -58,19 +58,19 @@ class welch(gr.sync_block):
                 	x = aver[b]
                     #Uses the scipy.signal.welch method to average data
             		f, pw = sp.welch(x,fs=self.fs,window='hann',
-                	             nperseg = self.nf,
-                	             noverlap=self.nf*self.noverlap,
-                	             scaling=self.scale,detrend=False)
+                            nperseg = self.nf,
+                            noverlap=self.nf*self.noverlap,
+                            scaling=self.scale,detrend=False)
             
             		out[i] = pw
-	if self.avg == "False":
-		for i in xrange(len(in0)):
-			x = in0[i]
+        if self.avg == "False":
+            for i in xrange(len(in0)):
+                x = in0[i]
             		#Uses the scipy.signal.welch method to average data
-            		f, pw = sp.welch(x,fs=self.fs,window='hann',
-                	         nperseg = self.nf,
-                	         noverlap=self.nf*self.noverlap,
-                	         scaling=self.scale,detrend=False)
+                f, pw = sp.welch(x,fs=self.fs,window='hann',
+                        nperseg = self.nf,
+                        noverlap=self.nf*self.noverlap,
+                        scaling=self.scale,detrend=False)
 		out[i] = pw
         return len(output_items[0])
         (output_items[0])

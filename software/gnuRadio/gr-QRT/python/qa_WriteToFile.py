@@ -82,7 +82,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
         lng = -88.2439
         alt = 0
         az = 0
-        averaging = False
+        averaging = 'False'
         avgn = 1
         # Saves the data with h5py, adds metadata
         if subgroup1+'/test' in f:
