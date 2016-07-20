@@ -44,10 +44,10 @@ class welch(gr.sync_block):
     def work(self, input_items, output_items):
         in0 = input_items[0]
         out = output_items[0]
-        if self.avg:
+        if self.avg == "True":
             aver = []
             avgn = self.avgn
-            for i in xrange (len(in0)/avgn):
+            for i in range(len(in0)/avgn):
                 ll = (i * avgn) - avgn
                 ul = (i*avgn)
                 aver[i] = numpy.zeros(self.nData)
@@ -63,7 +63,7 @@ class welch(gr.sync_block):
                 	             scaling=self.scale,detrend=False)
             
             		out[i] = pw
-	if not self.avg:
+	if self.avg == "False":
 		for i in xrange(len(in0)):
 			x = in0[i]
             		#Uses the scipy.signal.welch method to average data
