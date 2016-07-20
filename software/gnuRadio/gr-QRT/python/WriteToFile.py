@@ -30,7 +30,7 @@ class WriteToFile(gr.sync_block):
     """
     docstring for block WriteToFile
     """
-    def __init__(self, tname, nf, scale, fs, path, flo, lat, long, alt, az, averaging, avgn):
+    def __init__(self, tname, nf, scale, fs, path, flo, lat, lng, alt, az, averaging, avgn):
         gr.sync_block.__init__(self,
             name="WriteToFile",
             in_sig=[(numpy.complex64, nf)],
@@ -43,7 +43,7 @@ class WriteToFile(gr.sync_block):
         self.path = path
         self.flo = flo
         self.lat = lat
-        self.long = long
+        self.lng = lng
         self.alt = alt
         self.az = az
         self.averaging = averaging
@@ -70,13 +70,13 @@ class WriteToFile(gr.sync_block):
             dset.attrs['fs'] = self.fs
             dset.attrs['flo'] = self.flo
             dset.attrs['latitude'] = self.lat
-            dset.attrs['longitude'] = self.long
-            dset.attrs['altitude'] = self.altitude
+            dset.attrs['longitude'] = self.lng
+            dset.attrs['altitude'] = self.alt
             dset.attrs['azimuth'] = self.az
             dset.attrs['averaging'] = self.averaging
             dset.attrs['avgn'] = self.avgn
-            data.attrs['version'] = Version
-            dset = dset[...] + avg
+            dset.attrs['version'] = Version
+            dset = dset[...] + in0
         else:
             #Writes data and metadata
             dset = f.create_dataset(subgroup+'/'+dset_name,data=in0[0])
@@ -86,12 +86,12 @@ class WriteToFile(gr.sync_block):
             dset.attrs['fs'] = self.fs
             dset.attrs['flo'] = self.flo
             dset.attrs['latitude'] = self.lat
-            dset.attrs['longitude'] = self.long
-            dset.attrs['altitude'] = self.altitude
+            dset.attrs['longitude'] = self.lng
+            dset.attrs['altitude'] = self.alt
             dset.attrs['azimuth'] = self.az
             dset.attrs['averaging'] = self.averaging
             dset.attrs['avgn'] = self.avgn
-            data.attrs['version'] = Version
-            dset = dset[...] + avg
+            dset.attrs['version'] = Version
+            dset = dset[...] + in0
         return len(input_items[0])
 

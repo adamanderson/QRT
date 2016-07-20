@@ -79,7 +79,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
         time = (date.year,date.month,date.day,date.hour,date.minute,date.second)
         power = np.add(power,np.zeros(len(power))*1.j)
         lat = 41.825
-        long = -88.2439
+        lng = -88.2439
         alt = 0
         az = 0
         averaging = False
@@ -93,12 +93,12 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['fs'] = fs
             dset.attrs['flo'] = flo
             dset.attrs['latitude'] = lat
-            dset.attrs['longitude'] = long
-            dset.attrs['altitude'] = altitude
+            dset.attrs['longitude'] = lng
+            dset.attrs['altitude'] = alt
             dset.attrs['azimuth'] = az
             dset.attrs['averaging'] = averaging
             dset.attrs['avgn'] = avgn
-            data.attrs['version'] = Version
+            dset.attrs['version'] = Version
             dset = dset[...] + power[...]
         else:
             dset = f.create_dataset(subgroup1+'/test',data=power)
@@ -109,16 +109,16 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['flo'] = flo
             dset.attrs['latitude'] = lat
             dset.attrs['longitude'] = long
-            dset.attrs['altitude'] = altitude
+            dset.attrs['altitude'] = alt
             dset.attrs['azimuth'] = az
             dset.attrs['averaging'] = averaging
             dset.attrs['avgn'] = avgn
-            data.attrs['version'] = Version
+            dset.attrs['version'] = Version
         s2v = blocks.stream_to_vector(item_size, nData)
-    # Sends the source data through the welch module then the WriteToFile module.
+    	# Sends the source data through the welch module then the WriteToFile module.
 	src = blocks.vector_source_c(src_data)
-	wel = welch(nData, scale, nf, fs, .5)
-	fil = WriteToFile(tname, nf, scale, fs, path, flo, lat, long, alt, az, averaging, avgn)
+	wel = welch(nData, scale, nf, fs, .5, False, 1)
+	fil = WriteToFile(tname, nf, scale, fs, path, flo, lat, lng, alt, az, averaging, avgn)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
 	self.tb.connect(wel, fil)
