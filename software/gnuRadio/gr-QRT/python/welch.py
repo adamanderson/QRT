@@ -49,7 +49,7 @@ class welch(gr.sync_block):
             aver = numpy.empty((n, 0)).tolist()
             avgn = self.avgn
             for i in numpy.arange(len(in0)/avgn):
-                ll = (i * avgn) - avgndff
+                ll = (i * avgn) - avgn
                 ul = (i*avgn)
                 aver[i] = numpy.zeros(self.nData) + numpy.zeros(self.nData)*1.j
                 for num in range(ll,ul):
