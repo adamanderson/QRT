@@ -50,13 +50,13 @@ class welch(gr.sync_block):
             for i in xrange (len(in0)/avgn):
                 ll = (i * avgn) - avgn
                 ul = (i*avgn)
-                aver[i] = numpy.zeros(nData)
+                aver[i] = numpy.zeros(self.nData)
                 for num in range(ll,ul):
                     numpy.add(aver[i],in0[num])
                 aver[i] = aver[i]/avgn
-		for b in xrange (len(aver)):
+                for b in xrange (len(aver)):
                 	x = aver[b]
-			#Uses the scipy.signal.welch method to average data
+                    #Uses the scipy.signal.welch method to average data
             		f, pw = sp.welch(x,fs=self.fs,window='hann',
                 	             nperseg = self.nf,
                 	             noverlap=self.nf*self.noverlap,
