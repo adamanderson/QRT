@@ -117,7 +117,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
         s2v = blocks.stream_to_vector(item_size, nData)
     	# Sends the source data through the welch module then the WriteToFile module.
 	src = blocks.vector_source_c(src_data)
-	wel = welch(nData, scale, nf, fs, .5, False, 1)
+	wel = welch(nData, scale, nf, fs, .5, 'False', 1)
 	fil = WriteToFile(tname, nf, scale, fs, path, flo, lat, lng, alt, az, averaging, avgn)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)

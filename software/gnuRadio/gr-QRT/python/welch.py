@@ -52,17 +52,17 @@ class welch(gr.sync_block):
                 ul = (i*avgn)
                 aver[i] = numpy.zeros(self.nData)
                 for num in range(ll,ul):
-                    numpy.add(aver[i],in0[num])
+                    aver[i] = numpy.add(aver[i],in0[num])
                 aver[i] = aver[i]/avgn
-                for b in xrange (len(aver)):
-                	x = aver[b]
-                    #Uses the scipy.signal.welch method to average data
-            		f, pw = sp.welch(x,fs=self.fs,window='hann',
-                            nperseg = self.nf,
-                            noverlap=self.nf*self.noverlap,
-                            scaling=self.scale,detrend=False)
+            for b in xrange (len(aver)):
+                x = aver[b]
+                #Uses the scipy.signal.welch method to average data
+                f, pw = sp.welch(x,fs=self.fs,window='hann',
+                        nperseg = self.nf,
+                        noverlap=self.nf*self.noverlap,
+                        scaling=self.scale,detrend=False)
             
-            		out[i] = pw
+                out[i] = pw
         if self.avg == "False":
             for i in xrange(len(in0)):
                 x = in0[i]
