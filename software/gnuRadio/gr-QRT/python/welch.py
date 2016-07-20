@@ -45,10 +45,11 @@ class welch(gr.sync_block):
         in0 = input_items[0]
         out = output_items[0]
         if self.avg == "True":
-            aver = []
+            n = len(in0)/self.avgn
+            aver = numpy.empty((n, 0)).tolist()
             avgn = self.avgn
-            for i in range(len(in0)/avgn):
-                ll = (i * avgn) - avgn
+            for i in numpy.arrange(len(in0)/avgn):
+                ll = (i * avgn) - avgndff
                 ul = (i*avgn)
                 aver[i] = numpy.zeros(self.nData) + numpy.zeros(self.nData)*1.j
                 for num in range(ll,ul):
