@@ -72,7 +72,7 @@
     <name>Averaging</name>
     <key>averaging</key>
     <value>True</value>
-    <type>boolean</type>
+    <type>string</type>
 </param>
 <param>
     <name>Averagin Number</name>
