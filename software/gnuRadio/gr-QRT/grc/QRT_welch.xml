@@ -44,10 +44,10 @@
       <name>Averaging</name>
       <key>averaging</key>
       <value>True</value>
-      <type>boolean</type>
+      <type>string</type>
   </param>
   <param>
-      <name>Averagin Number</name>
+      <name>Averaging Number</name>
       <key>avgn</key>
       <value>1</value>
       <type>int</type>

@@ -18,7 +18,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
-# Version 1
+# Version 3
 import numpy
 from gnuradio import gr
 import scipy.signal as sp
@@ -44,8 +44,9 @@ class welch(gr.sync_block):
     def work(self, input_items, output_items):
         in0 = input_items[0]
         out = output_items[0]
-        if avg:
+        if self.avg:
             aver = []
+            avgn = self.avgn
             for i in xrange (len(in0)/avgn):
                 ll = (i * avgn) - avgn
                 ul = (i*avgn)
@@ -53,15 +54,24 @@ class welch(gr.sync_block):
                 for num in range(ll,ul):
                     numpy.add(aver[i],in0[num])
                 aver[i] = aver[i]/avgn
-        for i in xrange (len(aver))
-            x = aver[i]
-            #Uses the scipy.signal.welch method to average data
-            f, pw = sp.welch(x,fs=self.fs,window='hann',
-                         nperseg = self.nf,
-                         noverlap=self.nf*self.noverlap,
-                         scaling=self.scale,detrend=False)
+		for b in xrange (len(aver)):
+                	x = aver[b]
+			#Uses the scipy.signal.welch method to average data
+            		f, pw = sp.welch(x,fs=self.fs,window='hann',
+                	             nperseg = self.nf,
+                	             noverlap=self.nf*self.noverlap,
+                	             scaling=self.scale,detrend=False)
             
-            out[i] = pw
+            		out[i] = pw
+	if not self.avg:
+		for i in xrange(len(in0)):
+			x = in0[i]
+            		#Uses the scipy.signal.welch method to average data
+            		f, pw = sp.welch(x,fs=self.fs,window='hann',
+                	         nperseg = self.nf,
+                	         noverlap=self.nf*self.noverlap,
+                	         scaling=self.scale,detrend=False)
+		out[i] = pw
         return len(output_items[0])
         (output_items[0])
 
