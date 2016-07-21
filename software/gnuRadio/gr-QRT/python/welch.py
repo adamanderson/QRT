@@ -70,7 +70,7 @@ class welch(gr.sync_block):
                 out[i] = pw
             '''
             avg = numpy.add(numpy.zeros(self.nData),numpy.zeros(self.nData)*1.j)
-            for a in numpy.arange(avgn):
+            for a in numpy.arange(self.avgn):
                 low = a*self.nData
                 high = (a+1)*self.nData
                 avg = numpy.add(avg,in0[low:high])
