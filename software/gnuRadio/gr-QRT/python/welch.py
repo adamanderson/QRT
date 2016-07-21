@@ -47,7 +47,7 @@ class welch(gr.sync_block):
         if self.avg == "True":
             avg = numpy.add(numpy.zeros(self.nData),numpy.zeros(self.nData)*1.j)
             for i in xrange(len(in0)):
-		inp = in0[i
+		inp = in0[i]
                 for a in numpy.arange(self.avgn):
                     low = a*self.nData
                     high = (a+1)*self.nData
