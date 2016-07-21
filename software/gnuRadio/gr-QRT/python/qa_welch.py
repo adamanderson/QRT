@@ -125,6 +125,8 @@ class qa_welch (gr_unittest.TestCase):
         self.tb.connect(wel, dst)
         self.tb.run ()
         result = dst.data()
+	#print result
+	#print expected_result
         # Checks welch module with scipy.signal.welch
         self.assertFloatTuplesAlmostEqual(expected_result, result, 5)
 
