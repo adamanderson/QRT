@@ -45,41 +45,12 @@ class welch(gr.sync_block):
         in0 = input_items[0]
         out = output_items[0]
         if self.avg == "True":
-            '''
-            print len(in0)
-            n = len(in0)/self.avgn
-            aver = numpy.empty((n, 0)).tolist()
-            avgn = self.avgn
-            for i in numpy.arange(len(in0)/avgn):
-                ll = (i * avgn) - avgn
-                ul = (i*avgn)
-                aver[i] = numpy.zeros(self.nData) + numpy.zeros(self.nData)*1.j
-                for num in range(ll,ul):
-                    print in0[num]
-                    print len(in0[num])
-                    aver[i] = numpy.add(aver[i],in0[num])
-                aver[i] = aver[i]/avgn
-            for b in xrange (len(aver)):
-                x = aver[b]
-                #Uses the scipy.signal.welch method to average data
-                f, pw = sp.welch(x,fs=self.fs,window='hann',
-                        nperseg = self.nf,
-                        noverlap=self.nf*self.noverlap,
-                        scaling=self.scale,detrend=False)
-            
-                out[i] = pw
-            '''
             avg = numpy.add(numpy.zeros(self.nData),numpy.zeros(self.nData)*1.j)
-            #print self.nData
             for i in xrange(len(in0)):
                 for a in numpy.arange(self.avgn):
                     inp = in0[i]
                     low = a*self.nData
-                    print low
                     high = (a+1)*self.nData
-                    #print high
-                    #print len(in0)
-                    #print len(in0[0][low:high])
                     avg = numpy.add(avg,inp[low:high])
                 avg = avg/self.nData
                 f, pw = sp.welch(avg,fs=self.fs,
