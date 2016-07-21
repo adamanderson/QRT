@@ -47,19 +47,17 @@ class welch(gr.sync_block):
         if self.avg == "True":
             avg = numpy.add(numpy.zeros(self.nData),numpy.zeros(self.nData)*1.j)
             for i in xrange(len(in0)):
-		inp = in0[i]
-		print inp
+		inp = in0[i
                 for a in numpy.arange(self.avgn):
                     low = a*self.nData
                     high = (a+1)*self.nData
-		    print inp[low:high]
                     avg = numpy.add(avg,inp[low:high])
-		    print avg
                 avg = avg/self.nData
                 f, pw = sp.welch(avg,fs=self.fs,
                         window='hann',nperseg=self.nf,
                         noverlap=self.nf*self.noverlap,
                         scaling=self.scale,detrend=False)
+		out[i] = pw
         if self.avg == "False":
             for i in xrange(len(in0)):
                 x = in0[i]
