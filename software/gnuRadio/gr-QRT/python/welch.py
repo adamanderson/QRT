@@ -77,8 +77,8 @@ class welch(gr.sync_block):
                 high = (a+1)*self.nData
                 print high
                 print len(in0)
-                print len(in0[low:high])
-                avg = numpy.add(avg,in0[low:high])
+                print len(in0[0][low:high])
+                avg = numpy.add(avg,in0[0][low:high])
             avg = avg/nData
             f, pw = sp.welch(avg,fs=self.fs,
                     window='hann',nperseg=self.nf,
