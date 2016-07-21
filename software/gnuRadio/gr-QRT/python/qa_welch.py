@@ -78,7 +78,7 @@ class qa_welch (gr_unittest.TestCase):
         result = dst.data()
         # Checks welch module with scipy.signal.welch
         self.assertFloatTuplesAlmostEqual(expected_result, result, 5)
-    def test_001_t (self):
+    def test_002_t (self):
         def generate(inputs):
             # Generates data to test with
             fs = 10000.0
@@ -103,9 +103,10 @@ class qa_welch (gr_unittest.TestCase):
         nperseg = nf
         avg = 'True'
         avgn = 10
+	nData = len(src_data)/avgn
         # Processes data with Welch method using scipy.signal.welch command
         avg = np.add(np.zeros(nData),np.zeros(nData)*1.j)
-        for a in np.arange(avgn)
+        for a in np.arange(avgn):
             low = a*nData
             high = (a+1)*nData
             avg = np.add(avg,src_data[low:high])
@@ -114,9 +115,8 @@ class qa_welch (gr_unittest.TestCase):
                                 window='hann',nperseg=nperseg,
                                 noverlap=nf*.5,scaling=scale,detrend=False)
         item_size = np.dtype("complex64").itemsize
-        nData = len(src_data)
         # Sends the source data through the welch module
-        s2v = blocks.stream_to_vector(item_size, nData)
+        s2v = blocks.stream_to_vector(item_size, nData*avgn)
         src = blocks.vector_source_c(src_data)
         wel = welch(nData, scale, nf, fs, .5, avg, avgn)
         dst = blocks.vector_sink_c(nf)

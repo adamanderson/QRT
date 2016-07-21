@@ -68,9 +68,9 @@ class welch(gr.sync_block):
                         scaling=self.scale,detrend=False)
             
                 out[i] = pw
-                '''
+            '''
             avg = np.add(np.zeros(self.nData),np.zeros(self.nData)*1.j)
-            for a in np.arange(avgn)
+            for a in np.arange(avgn):
                 low = a*self.nData
                 high = (a+1)*self.nData
                 avg = np.add(avg,in0[low:high])
