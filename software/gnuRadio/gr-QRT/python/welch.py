@@ -70,24 +70,26 @@ class welch(gr.sync_block):
                 out[i] = pw
             '''
             avg = numpy.add(numpy.zeros(self.nData),numpy.zeros(self.nData)*1.j)
-            print self.nData
-            for a in numpy.arange(self.avgn):
-                low = a*self.nData
-                print low
-                high = (a+1)*self.nData
-                print high
-                print len(in0)
-                print len(in0[0][low:high])
-                avg = numpy.add(avg,in0[0][low:high])
-            avg = avg/nData
-            f, pw = sp.welch(avg,fs=self.fs,
-                    window='hann',nperseg=self.nf,
-                    noverlap=self.nf*self.noverlap,
-                    scaling=self.scale,detrend=False)
+            #print self.nData
+            for i in xrange(len(in0)):
+                for a in numpy.arange(self.avgn):
+                    inp = in0[i]
+                    low = a*self.nData
+                    print low
+                    high = (a+1)*self.nData
+                    #print high
+                    #print len(in0)
+                    #print len(in0[0][low:high])
+                    avg = numpy.add(avg,inp[low:high])
+                avg = avg/self.nData
+                f, pw = sp.welch(avg,fs=self.fs,
+                        window='hann',nperseg=self.nf,
+                        noverlap=self.nf*self.noverlap,
+                        scaling=self.scale,detrend=False)
         if self.avg == "False":
             for i in xrange(len(in0)):
                 x = in0[i]
-            		#Uses the scipy.signal.welch method to average data
+            		# Uses the scipy.signal.welch method to average data
                 f, pw = sp.welch(x,fs=self.fs,window='hann',
                         nperseg = self.nf,
                         noverlap=self.nf*self.noverlap,
