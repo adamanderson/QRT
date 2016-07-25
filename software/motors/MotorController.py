@@ -68,12 +68,12 @@ class MotorControl(object):
         radELEV = np.arccos(cosELEV)
         ELEV  = radELEV*(180/np.pi)
         if np.sin(ha) < 0:
-            AZ = ELEVATION
+            AZ = ELEV
         else:
-            AZ = 360-ELAVATION
+            AZ = 360-ELEV
         
         a = AZ*(np.pi/180)
-        e = (ELEVATION+0.1)*(np.pi/180)
+        e = (ELEV+0.1)*(np.pi/180)
         x = np.cos(a)*np.sin((np.pi/2)-e)
         z = np.cos((np.pi/2)-e)
         alpha = np.arccos(x)
