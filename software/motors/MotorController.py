@@ -66,7 +66,7 @@ class MotorControl(object):
 
         cosELEV = (np.sin(declination)-np.sin(radALT)*np.sin(lat))/(np.cos(radALT)*np.cos(lat))
         radELEV = np.arccos(cosELEV)
-        ELEV  = radELAV*(180/np.pi)
+        ELEV  = radELEV*(180/np.pi)
         if np.sin(ha) < 0:
             AZ = ELEVATION
         else:
