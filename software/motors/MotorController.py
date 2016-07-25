@@ -107,7 +107,7 @@ class MotorControl(object):
             last_state = current_state - 1
         else:
             last_state = current_state + 1
-        if position > 1340:
+        if position > 1340 or position < 0:
             print('That Right Ascension is too large for the motor.')
         else:
             while (self.currentPosition) != positionincounts: #creates a loop till it gets to the position it needs to be at
@@ -151,7 +151,7 @@ class MotorControl(object):
             last_state2 = current_state2 - 1
         else:
             last_state2 = current_state2 + 1
-        if position2 > 670:
+        if position2 > 670 or position2 < 0:
             print('That declination is too large for the motor.')
         else:
             while (self.currentPosition2) != positionincounts2: #creates a loop till it gets to the position it needs to be at
