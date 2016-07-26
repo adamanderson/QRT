@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import time
 import numpy as np
 from datetime import datetime
+import calendar
 
 class MotorControl(object):
     def __init__(self): #constructor
@@ -35,8 +36,8 @@ class MotorControl(object):
 	longitude = -88.2439
 	radegs = ra * 15
     unitime = datetime.utcnow()
-    ut = unitime.hour + unitime.minute/60+unitime.second/3600
-    dj2000 = float((calendar.timegm(time.gemtime()) - 946684800)/86400)
+    ut = unitime.hour + unitime.minute/60.+unitime.second/3600.
+    dj2000 = float((calendar.timegm(time.gmtime()) - 946727936.)/86400.)
         lst = 100.46 + 0.985647 * dj2000 + longitude + (15*ut)
         while lst < 0:
             lst += 360
