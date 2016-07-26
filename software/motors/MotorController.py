@@ -78,6 +78,9 @@ class MotorControl(object):
             AZ = ELEV
         else:
             AZ = 360-ELEV
+
+        print(AZ)
+        print(ELEV)
         
         a = AZ*(np.pi/180)
         e = (ELEV+0.1)*(np.pi/180)
@@ -93,7 +96,7 @@ class MotorControl(object):
         deltadata_extension = [0, 1, 2, 3, 4, 5, 6, 7]
         deltadata_angle = [26, 37, 47, 55, 65, 73, 81, 90]
         position2 = np.interp(deltaindegs, deltadata_angle, deltadata_extension)
-	positionincounts = round(position*95.47)
+        positionincounts = round(position*95.47)
         positionincounts2 = round(position2*95.47)
         self.currentPosition #calls variables
         self.currentPosition2
