@@ -79,8 +79,8 @@ class MotorControl(object):
         else:
             AZ = 360-ELEV
 
+        print(ALT)
         print(AZ)
-        print(ELEV)
         
         a = AZ*(np.pi/180)
         e = (ELEV+0.1)*(np.pi/180)
