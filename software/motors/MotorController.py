@@ -30,10 +30,12 @@ class MotorControl(object):
         GPIO.output(18, GPIO.LOW)
         GPIO.output(24, GPIO.LOW)
 
-    def motorcontrol(self, ra, dec, dj2000, ut): #creates the function to go to a set length, note: the values have to be in decimal form
+    def motorcontrol(self, ra, dec, dj2000): #creates the function to go to a set length, note: the values have to be in decimal form
 	latitude = 41.825
 	longitude = -88.2439
 	radegs = ra * 15
+    unitime = datetime.utcnow()
+    ut = unitime.hour() + unitime.minute()/60+unitime.second()/3600
         lst = 100.46 + 0.985647 * dj2000 + longitude + (15*ut)
         while lst < 0:
             lst += 360
