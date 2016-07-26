@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import numpy as np
+from datetime import datetime
 
 class MotorControl(object):
     def __init__(self): #constructor
@@ -29,8 +30,10 @@ class MotorControl(object):
         GPIO.output(18, GPIO.LOW)
         GPIO.output(24, GPIO.LOW)
 
-    def motorcontrol(self, ra, dec, latitude, longitude, dj2000, ut): #creates the function to go to a set length, note: the values have to be in decimal form
-        radegs = ra * 15
+    def motorcontrol(self, ra, dec, dj2000, ut): #creates the function to go to a set length, note: the values have to be in decimal form
+	latitude = 41.825
+	longitude = -88.2439
+	radegs = ra * 15
         lst = 100.46 + 0.985647 * dj2000 + longitude + (15*ut)
         while lst < 0:
             lst += 360
@@ -86,7 +89,7 @@ class MotorControl(object):
         deltadata_extension = [0, 1, 2, 3, 4, 5, 6, 7]
         deltadata_angle = [26, 37, 47, 55, 65, 73, 81, 90]
         position2 = np.interp(deltaindegs, deltadata_angle, deltadata_extension)
-        positionincounts = round(position*95.47)
+	positionincounts = round(position*95.47)
         positionincounts2 = round(position2*95.47)
         self.currentPosition #calls variables
         self.currentPosition2
