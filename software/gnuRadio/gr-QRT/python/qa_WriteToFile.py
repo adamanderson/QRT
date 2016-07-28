@@ -56,17 +56,25 @@ class qa_WriteToFile (gr_unittest.TestCase):
         flo = 0
         # Makes imaginary data
         cache = '/home/pi/Data/'
-        rafile = open('/home/pi/Data/ra.txt', 'r')
-        ra = rafile.read()
+        rafile = open('/home/pi/Data/ra.txt', 'w')
+        #ra = rafile.read()
+        ra = 99999
+        rafile.write(str(ra))
         rafile.close()
         decfile = open('/home/pi/Data/dec.txt', 'r')
-        dec = decfile.read()
+        #dec = decfile.read()
+        dec = 99999
+        decfile.write(str(dec))
         decfile.close()
         pos1file = open('/home/pi/Data/pos1.txt', 'r')
-        pos1 = pos1file.read()
+        #pos1 = pos1file.read()
+        pos1 = 99999
+        pos1file.write(str(pos1))
         pos1file.close()
         pos2file = open('/home/pi/Data/pos2.txt', 'r')
-        pos2 = pos2file.read()
+        #pos2 = pos2file.read()
+        pos2 = 99999
+        pos2file.write(str(pos2))
         pos2file.close()
         rdata = generate(10000)
         idata = np.zeros(len(rdata))*1j
