@@ -61,17 +61,17 @@ class qa_WriteToFile (gr_unittest.TestCase):
         ra = 99999
         rafile.write(str(ra))
         rafile.close()
-        decfile = open('/home/pi/Data/dec.txt', 'r')
+        decfile = open('/home/pi/Data/dec.txt', 'w')
         #dec = decfile.read()
         dec = 99999
         decfile.write(str(dec))
         decfile.close()
-        pos1file = open('/home/pi/Data/pos1.txt', 'r')
+        pos1file = open('/home/pi/Data/pos1.txt', 'w')
         #pos1 = pos1file.read()
         pos1 = 99999
         pos1file.write(str(pos1))
         pos1file.close()
-        pos2file = open('/home/pi/Data/pos2.txt', 'r')
+        pos2file = open('/home/pi/Data/pos2.txt', 'w')
         #pos2 = pos2file.read()
         pos2 = 99999
         pos2file.write(str(pos2))
