@@ -56,7 +56,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
         flo = 0
         # Makes imaginary data
         cache = '/home/pi/Data/'
-        rafile = open.('/home/pi/Data/ra.txt', 'r')
+        rafile = open('/home/pi/Data/ra.txt', 'r')
         ra = rafile.read()
         rafile.close()
         decfile = open('/home/pi/Data/dec.txt', 'r')

@@ -59,7 +59,7 @@ class WriteToFile(gr.sync_block):
         #Sets up hierarchy
         subgroup = str(date.minute)
         dset_name = str(date.second)
-        rafile = open.(self.cache+'ra.txt', 'r')
+        rafile = open(self.cache+'ra.txt', 'r')
         ra = rafile.read()
         rafile.close()
         decfile = open(self.cache+'dec.txt', 'r')
