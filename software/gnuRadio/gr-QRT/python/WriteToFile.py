@@ -18,19 +18,19 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
-#Version 4
+#Version 5
 
 import numpy
 from gnuradio import gr
 import h5py
 import datetime as dt
 
-Version = 4
+Version = 5
 class WriteToFile(gr.sync_block):
     """
     docstring for block WriteToFile
     """
-    def __init__(self, tname, nf, scale, fs, path, flo, lat, lng, alt, az, averaging, avgn):
+    def __init__(self, tname, nf, scale, fs, path, flo, lat, lng, averaging, avgn, cache):
         gr.sync_block.__init__(self,
             name="WriteToFile",
             in_sig=[(numpy.complex64, nf)],
@@ -44,10 +44,9 @@ class WriteToFile(gr.sync_block):
         self.flo = flo
         self.lat = lat
         self.lng = lng
-        self.alt = alt
-        self.az = az
         self.averaging = averaging
         self.avgn = avgn
+        self.cache = cache
 
     def work(self, input_items, output_items):
         in0 = input_items[0]
@@ -60,6 +59,18 @@ class WriteToFile(gr.sync_block):
         #Sets up hierarchy
         subgroup = str(date.minute)
         dset_name = str(date.second)
+        rafile = open.(self.cache+'ra.txt', 'r')
+        ra = rafile.read()
+        rafile.close()
+        decfile = open(self.cache+'dec.txt', 'r')
+        dec = decfile.read()
+        decfile.close()
+        pos1file = open(self.cache+'pos1.txt', 'r')
+        pos1 = pos1file.read()
+        pos1file.close()
+        pos2file = open(self.cache+'pos2.txt', 'r')
+        pos2 = pos2file.read()
+        pos2file.close()
         time = (date.year,date.month,date.day,date.hour,date.minute,date.second)
         if subgroup+'/'+dset_name in f:
             #Writes data and metadata
@@ -71,8 +82,10 @@ class WriteToFile(gr.sync_block):
             dset.attrs['flo'] = self.flo
             dset.attrs['latitude'] = self.lat
             dset.attrs['longitude'] = self.lng
-            dset.attrs['altitude'] = self.alt
-            dset.attrs['azimuth'] = self.az
+            dset.attrs['ra'] = ra
+            dset.attrs['dec'] = dec
+            dset.attrs['pos1'] = pos1
+            dset.attrs['pos2'] = pos2
             dset.attrs['averaging'] = self.averaging
             dset.attrs['avgn'] = self.avgn
             dset.attrs['version'] = Version
@@ -85,10 +98,12 @@ class WriteToFile(gr.sync_block):
             dset.attrs['scale'] = self.scale
             dset.attrs['fs'] = self.fs
             dset.attrs['flo'] = self.flo
+            dset.attrs['ra'] = ra
+            dset.attrs['dec'] = dec
             dset.attrs['latitude'] = self.lat
             dset.attrs['longitude'] = self.lng
-            dset.attrs['altitude'] = self.alt
-            dset.attrs['azimuth'] = self.az
+            dset.attrs['pos1'] = pos1
+            dset.attrs['pos2'] = pos2
             dset.attrs['averaging'] = self.averaging
             dset.attrs['avgn'] = self.avgn
             dset.attrs['version'] = Version

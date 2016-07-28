@@ -18,8 +18,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 #
-# Version 4
-Version = 4
+# Version 5
+Version = 5
 from gnuradio import gr, gr_unittest
 from gnuradio import blocks
 from WriteToFile import WriteToFile
@@ -55,6 +55,19 @@ class qa_WriteToFile (gr_unittest.TestCase):
         path = ''
         flo = 0
         # Makes imaginary data
+        cache = '/home/pi/Data/'
+        rafile = open.('/home/pi/Data/ra.txt', 'r')
+        ra = rafile.read()
+        rafile.close()
+        decfile = open('/home/pi/Data/dec.txt', 'r')
+        dec = decfile.read()
+        decfile.close()
+        pos1file = open('/home/pi/Data/pos1.txt', 'r')
+        pos1 = pos1file.read()
+        pos1file.close()
+        pos2file = open('/home/pi/Data/pos2.txt', 'r')
+        pos2 = pos2file.read()
+        pos2file.close()
         rdata = generate(10000)
         idata = np.zeros(len(rdata))*1j
         src_data = np.add(rdata,idata)
@@ -94,8 +107,10 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['flo'] = flo
             dset.attrs['latitude'] = lat
             dset.attrs['longitude'] = lng
-            dset.attrs['altitude'] = alt
-            dset.attrs['azimuth'] = az
+            dset.attrs['ra'] = ra
+            dset.attrs['dec'] = dec
+            dset.attrs['pos1'] = pos1
+            dset.attrs['pos2'] = pos2
             dset.attrs['averaging'] = averaging
             dset.attrs['avgn'] = avgn
             dset.attrs['version'] = Version
@@ -109,8 +124,10 @@ class qa_WriteToFile (gr_unittest.TestCase):
             dset.attrs['flo'] = flo
             dset.attrs['latitude'] = lat
             dset.attrs['longitude'] = long
-            dset.attrs['altitude'] = alt
-            dset.attrs['azimuth'] = az
+            dset.attrs['ra'] = ra
+            dset.attrs['dec'] = dec
+            dset.attrs['pos1'] = pos1
+            dset.attrs['pos2'] = pos2
             dset.attrs['averaging'] = averaging
             dset.attrs['avgn'] = avgn
             dset.attrs['version'] = Version
@@ -118,7 +135,7 @@ class qa_WriteToFile (gr_unittest.TestCase):
     	# Sends the source data through the welch module then the WriteToFile module.
 	src = blocks.vector_source_c(src_data)
 	wel = welch(nData, scale, nf, fs, .5, 'False', 1)
-	fil = WriteToFile(tname, nf, scale, fs, path, flo, lat, lng, alt, az, averaging, avgn)
+	fil = WriteToFile(tname, nf, scale, fs, path, flo, lat, lng, averaging, avgn, cache)
 	self.tb.connect(src, s2v)
         self.tb.connect(s2v, wel)
 	self.tb.connect(wel, fil)

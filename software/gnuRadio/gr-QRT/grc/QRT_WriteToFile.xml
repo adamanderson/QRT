@@ -4,7 +4,7 @@
   <key>QRT_WriteToFile</key>
   <category>QRT</category>
   <import>import QRT</import>
-  <make>QRT.WriteToFile($tname, $nf, $scale, $fs, $path, $flo, $lat, $long, $alt, $az, $averaging, $avgn)</make>
+  <make>QRT.WriteToFile($tname, $nf, $scale, $fs, $path, $flo, $lat, $long, $averaging, $avgn, $cache)</make>
  <!-- Make one 'param' node for every Parameter you want settable from the GUI.
        Sub-nodes:
        * name
@@ -45,18 +45,6 @@
     <type>float</type>
 </param>
 <param>
-    <name>Altitude</name>
-    <key>alt</key>
-    <value>alt</value>
-    <type>float</type>
-</param>
-<param>
-    <name>Azimuth</name>
-    <key>az</key>
-    <value>az</value>
-    <type>float</type>
-</param>
-<param>
     <name>Latitude</name>
     <key>lat</key>
     <value>41.825</value>
@@ -79,6 +67,11 @@
     <key>avgn</key>
     <value>1</value>
     <type>int</type>
+</param>
+<param>
+    <name>Cache Directory</name>
+    <key>cache</key>
+    <type>string</type>
 </param>
   <!-- Make one 'sink' node per input. Sub-nodes:
        * name (an identifier for the GUI)
