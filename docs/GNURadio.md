@@ -3,6 +3,7 @@
 Installing GNURadio under Debian on the Raspberry Pi is as simple as:
 ```
 sudo apt-get update
+sudo apt-get upgrade
 sudo apt-get install gnuradio*
 ```
 
