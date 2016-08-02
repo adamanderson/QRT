@@ -1,10 +1,10 @@
 import sys
 import Pyro4
 
-ra = sys.argv[0]
-dec = sys.argv[1]
+ra = sys.argv[1]
+dec = sys.argv[2]
 
-function = sys.argv[2]
+function = sys.argv[3]
 
 proxy = Pyro4.core.Proxy("PYRONAME:motorcontroller.server")
 if(float(function) == 1):
