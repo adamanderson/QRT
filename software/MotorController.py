@@ -3,6 +3,7 @@ import time
 import numpy as np
 from datetime import datetime
 import calendar
+import Pyro4
 
 class MotorControl(object):
     def __init__(self): #constructor
@@ -11,26 +12,36 @@ class MotorControl(object):
         self.updater = 0
         self.updater2 = 0
 
+        self.firstRelayIn = 6
+        self.secondRelayIn = 19
+        self.thirdRelayIn = 24
+        self.fourthRelayIn = 18
+
+        self.motorOneIn = 17
+        self.motorTwoIn = 12
+
+    @Pyro4.expose
     def reset(self):
         GPIO.setmode(GPIO.BCM)
 
-        GPIO.setup(19, GPIO.OUT)
-        GPIO.setup(6, GPIO.OUT)
-        GPIO.setup(24, GPIO.OUT)
-        GPIO.setup(18, GPIO.OUT)
+        GPIO.setup(self.firstRelayIn, GPIO.OUT)
+        GPIO.setup(self.secondRelayIn, GPIO.OUT)
+        GPIO.setup(self.thirdRelayIn, GPIO.OUT)
+        GPIO.setup(self.fourthRelayIn, GPIO.OUT)
         for n in range(20000):
-            GPIO.output(6, GPIO.HIGH)
-            GPIO.output(19, GPIO.LOW)
-            GPIO.output(24, GPIO.HIGH)
-            GPIO.output(18, GPIO.LOW)
+            GPIO.output(self.firstRelayIn, GPIO.HIGH)
+            GPIO.output(self.secondRelayIn, GPIO.LOW)
+            GPIO.output(self.thirdRelayIn, GPIO.HIGH)
+            GPIO.output(self.fourthRelayIn, GPIO.LOW)
             self.currentPosition = 0
             self.currentPosition2 = 0
             time.sleep(0.001)
-        GPIO.output(6, GPIO.LOW)
-        GPIO.output(19, GPIO.LOW)
-        GPIO.output(18, GPIO.LOW)
-        GPIO.output(24, GPIO.LOW)
+        GPIO.output(self.firstRelayIn, GPIO.LOW)
+        GPIO.output(self.secondRelayIn, GPIO.LOW)
+        GPIO.output(self.fourthRelayIn, GPIO.LOW)
+        GPIO.output(self.thirdRelayIn, GPIO.LOW)
 
+    @Pyro4.expose
     def motorcontrol(self, ra, dec, offset = 0): #creates the function to go to a set length, note: the values have to be in decimal form
         latitude = 41.825
         longitude = -88.2439
@@ -104,14 +115,17 @@ class MotorControl(object):
         self.updater2 = 0
         GPIO.setmode(GPIO.BCM)
 
-        GPIO.setup(19, GPIO.OUT)
-        GPIO.setup(6, GPIO.OUT)
-        GPIO.setup(24, GPIO.OUT)
-        GPIO.setup(18, GPIO.OUT)
-        GPIO.setup(17, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-        GPIO.setup(12, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.secondRelayIn, GPIO.OUT)
+        GPIO.setup(self.firstRelayIn, GPIO.OUT)
+        GPIO.setup(self.thirdRelayIn, GPIO.OUT)
+        GPIO.setup(self.fourthRelayIn, GPIO.OUT)
+        GPIO.setup(self.motorOneIn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.setup(self.motorTwoIn, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
         current_state = 1
+
+        print(position)
+        print(position2)
         
         if current_state == 1:
             last_state = current_state - 1
@@ -122,7 +136,7 @@ class MotorControl(object):
         else:
             while (self.currentPosition) != positionincounts: #creates a loop till it gets to the position it needs to be at
                 last_state = current_state
-                current_state = GPIO.input(17)
+                current_state = GPIO.input(self.motorOneIn)
                 if (self.currentPosition) < positionincounts: #checks if the motor needs to go in or out
                     if last_state == 0 and current_state == 1: #counting everytime the pulse changes
                         self.currentPosition += 1 #extends the motor
@@ -130,8 +144,8 @@ class MotorControl(object):
                     if last_state == 1 and current_state == 0:
                         self.currentPosition = self.currentPosition + 1
                         self.updater += 1
-                    GPIO.output(6, GPIO.LOW)
-                    GPIO.output(19, GPIO.HIGH)
+                    GPIO.output(self.firstRelayIn, GPIO.LOW)
+                    GPIO.output(self.secondRelayIn, GPIO.HIGH)
                     if self.updater == 1: #prints out position at a certain interval and resets the update timer 
                         print('Your current position is (A) in motor 1 ',self.currentPosition)
                         self.updater = 0
@@ -143,20 +157,21 @@ class MotorControl(object):
                     if last_state == 1 and current_state == 0:
                         self.currentPosition -= 1
                         self.updater += 1
-                    GPIO.output(6, GPIO.HIGH)
-                    GPIO.output(19, GPIO.LOW)
+                    GPIO.output(self.firstRelayIn, GPIO.HIGH)
+                    GPIO.output(self.secondRelayIn, GPIO.LOW)
                     if self.updater == 1:
                         print('Your current position is (B) in motor 1 ',(self.currentPosition))
                         self.updater = 0
                     time.sleep(0.001)
                 time.sleep(0.001)
-            GPIO.output(6, GPIO.LOW)
-            GPIO.output(19, GPIO.LOW)
+            GPIO.output(self.firstRelayIn, GPIO.LOW)
+            GPIO.output(self.secondRelayIn, GPIO.LOW)
             currentPositionininches = positionincounts/95.47
             print('You have reached your position in motor 1')
             print(currentPositionininches)
             current_state2 = 1
 
+        
         if current_state2 == 1:
             last_state2 = current_state2 - 1
         else:
@@ -166,7 +181,7 @@ class MotorControl(object):
         else:
             while (self.currentPosition2) != positionincounts2: #creates a loop till it gets to the position it needs to be at
                 last_state2 = current_state2
-                current_state2 = GPIO.input(12)
+                current_state2 = GPIO.input(self.motorTwoIn)
                 if (self.currentPosition2) < positionincounts2: #checks if the motor needs to go in or out
                     if last_state2 == 0 and current_state2 == 1: #counting everytime the pulse changes
                         self.currentPosition2 += 1 #extends the motor
@@ -174,8 +189,8 @@ class MotorControl(object):
                     if last_state2 == 1 and current_state2 == 0:
                         self.currentPosition2 = self.currentPosition2 + 1
                         self.updater2 += 1
-                    GPIO.output(24, GPIO.LOW)
-                    GPIO.output(18, GPIO.HIGH)
+                    GPIO.output(self.thirdRelayIn, GPIO.LOW)
+                    GPIO.output(self.fourthRelayIn, GPIO.HIGH)
                     if self.updater2 == 1: #prints out position at a certain interval and resets the update timer 
                         print('Your current position is (A) in motor 2 ',self.currentPosition2)
                         self.updater2 = 0
@@ -187,15 +202,15 @@ class MotorControl(object):
                     if last_state2 == 1 and current_state2 == 0:
                         self.currentPosition2 -= 1
                         self.updater2 += 1
-                    GPIO.output(24, GPIO.HIGH)
-                    GPIO.output(18, GPIO.LOW)
+                    GPIO.output(self.thirdRelayIn, GPIO.HIGH)
+                    GPIO.output(self.fourthRelayIn, GPIO.LOW)
                     if self.updater2 == 1:
                         print('Your current position is (B) in motor 2 ',(self.currentPosition2))
                         self.updater2 = 0
                     time.sleep(0.001)
                 time.sleep(0.001)
-            GPIO.output(24, GPIO.LOW)
-            GPIO.output(18, GPIO.LOW)
+            GPIO.output(self.thirdRelayIn, GPIO.LOW)
+            GPIO.output(self.fourthRelayIn, GPIO.LOW)
             currentPositionininches2 = positionincounts2/95.47
             print('You have reached your position in motor 2')
             print(currentPositionininches2)
@@ -211,3 +226,9 @@ class MotorControl(object):
         pos2file = open('/home/pi/Data/pos2.txt', 'w')
         pos2file.write(str(currentPositionininches2))
         pos2file.close()
+
+    @Pyro4.expose
+    def motorScan(self, ra, dec, offset = 0):
+        while True:
+            self.motorcontrol(ra, dec, offset)
+            time.sleep(5)
