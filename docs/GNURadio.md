@@ -28,9 +28,9 @@ framebuffer_ignore_alpha=1
 Reboot the Pi and relaunch osmocom_fft.
 
 If you get an OpenGL error with ID#1281, you may need to enable the OpenGL driver for your Pi. Use:
-'''
+```
 sudo raspi-config
-'''
+```
 Navigate to "Advanced Options", move down to "GL Driver", then enable it.
 
 
