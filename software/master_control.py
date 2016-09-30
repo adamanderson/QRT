@@ -18,10 +18,8 @@
 
 import select
 import sys
-import Pyro4.core
-import Pyro4.naming
-
-import testcontrol
+import Pyro4
+import MotorController
 
 
 # boilerplate code to create pyro daemons
@@ -32,7 +30,7 @@ pyroDaemon=Pyro4.core.Daemon(host='localhost') # create a pyro daemon
 
 
 # initialize objects whose data we intend to share via pyro
-motorcontroller = testcontrol.DummyController()
+motorcontroller = MotorController.MotorControl()
 # ... repeat as needed for other objects ...
 
 # register the objects with the pyro daemon to get URI
@@ -76,7 +74,7 @@ try:
 
 
         # do other regular tasks here...
-        motorcontroller.increment_count()
+        # motorcontroller.increment_count()
 
 except KeyboardInterrupt:
     # clean up
